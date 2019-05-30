@@ -101,20 +101,24 @@ $(document).ready(function () {
 		var displayText = "";
 		for(var i = 0; i < numDice; i++) {
 			var result = roll(targetNumber, derby);
-			if(result[1] != -1) {
-				displayText += result[0] + " (" + result[1] + "), ";
-			} else {
-				displayText += result[0] + ", ";
-			}
-			if(checkSuccess(result[0], targetNumber)) {
+			var success = checkSuccess(result[0], targetNumber);
+			var resultText = success ? "<span><b>" + result[0] + "</b></span>" : result[0];
+			
+			if(success) {
 				numSuccesses++;
+			}
+			
+			if(result[1] != -1) {
+				displayText += resultText + "<span><i> (" + result[1] + ")</i></span>, ";
+			} else {
+				displayText += resultText + ", ";
 			}
 		}
 		
 		// remove the trailing ,
 		displayText = displayText.substring(0, displayText.length - 2);
 		
-		$("#resultTextCheck").text(displayText);
+		$("#resultTextCheck").html(displayText);
 		$("#resultTextSuccess").text(numSuccesses);
 		$(this).blur();
 	});
@@ -126,6 +130,13 @@ $(document).ready(function () {
 		$(this).blur();
 	});
 	
+	// init surprised
+	$("#rollInitSuprised").click(function() {
+		var initResult = rollD10();
+		$("#resultTextInit").text(initResult);
+		$(this).blur();
+	});
+		
 	
 	//setup spinner
 	$("input[type='number']").inputSpinner();
